@@ -4,11 +4,18 @@ import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Header from '@/components/Header';
+import { StyleSheet, View } from 'react-native';
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
+  <>
+    <View style={styles.header}>
+    <Header  userImage="https://example.com/user-photo.jpg" />
+    </View>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
@@ -17,21 +24,31 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Início',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
+            <TabBarIcon name={focused ? 'logo-usd' : 'home-outline'} color={color} />
+            ),
+          }}
+          />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
+          title: 'Lista de Transações',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name={'swap-vertical'} color={color} />
+            ),
+          }}
+          />
     </Tabs>
+  </>
+
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+     marginTop: 50,
+  },
+  
+
+});

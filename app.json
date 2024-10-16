@@ -31,6 +31,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b3e9d0cd-9f8b-46bb-bceb-c6707b608c34"
+      }
+    },
+    "owner": "carlos_siqueira"
   }
 }
