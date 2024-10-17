@@ -36,7 +36,8 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginVertical : 20,
+
   },
   header: {
     flexDirection: 'row',

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import MonthList  from './MonthList';
+import YearSelect from './YearSelect';
+
 
 interface TransactionFormProps {
   onAddTransaction: (description: string, value: number, type: 'income' | 'outcome') => void;
@@ -9,6 +13,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
   const [newTransactionDescription, setNewTransactionDescription] = useState('');
   const [newTransactionValue, setNewTransactionValue] = useState('');
   const [newTransactionType, setNewTransactionType] = useState<'income' | 'outcome'>('income');
+
+  const [text, setText] = React.useState("")
+  const [number, setNumber] = React.useState("")
 
   const handleAddTransaction = () => {
     const value = parseFloat(newTransactionValue);
@@ -26,17 +33,27 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
 
   return (
     <View style={styles.form}>
+      <MonthList />
+      
       <TextInput
-        style={styles.input}
-        placeholder="Descrição"
+        mode='outlined'
+        style={styles.inputBox}
+        outlineStyle={styles.input}
         value={newTransactionDescription}
-        onChangeText={setNewTransactionDescription}
+        label="Descrição"
+        outlineColor='#ccc'
+        activeOutlineColor='#4CAF50'
+        onChangeText={newTransactionDescription => setNewTransactionDescription(newTransactionDescription)}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Valor"
+        mode='outlined'
+        style={styles.inputBox}
+        outlineStyle={styles.input}
         value={newTransactionValue}
-        onChangeText={setNewTransactionValue}
+        outlineColor='#ccc'
+        activeOutlineColor='#4CAF50'
+        label="Valor"
+        onChangeText={newTransactionValue => setNewTransactionValue(newTransactionValue)}
         keyboardType="numeric"
       />
       <View style={styles.selectContainer}>
@@ -64,21 +81,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
 const styles = StyleSheet.create({
   form: {
     marginBottom: 20,
+    
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    marginBottom: 10,
+  borderRadius: 8,
+
+  },
+
+  inputBox: {
+    // marginVertical: 5,
   },
   selectContainer: {
     flexDirection: 'row',
     gap: 10,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
   },
   selectLabel: {
     fontSize: 16,

@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface HeaderProps {
   transactions: { value: number; type: 'income' | 'outcome' }[];
   calculateTotal: () => number;
 }
 
-const Header: React.FC<HeaderProps> = ({ transactions, calculateTotal }) => {
+const Balance: React.FC<HeaderProps> = ({ transactions, calculateTotal }) => {
   const totalIncome = transactions.reduce((acc, transaction) =>
     transaction.type === 'income' ? acc + transaction.value : acc,
     0,
@@ -20,17 +21,19 @@ const Header: React.FC<HeaderProps> = ({ transactions, calculateTotal }) => {
   return (
     <View style={styles.header}>
       <View style={styles.headerItem}>
+      <Icon name="arrow-up" size={20} color="green"/>
         <Text style={styles.headerTitle}>Entradas</Text>
         <Text style={styles.headerValue}>R$ {totalIncome.toFixed(2)}</Text>
       </View>
       <View style={styles.headerItem}>
-        <Text style={styles.headerTitle}>Saídas</Text>
+      <Icon name="arrow-down" size={20} color="red" />
+        <Text style={styles.headerTitle}>Saídas </Text>
         <Text style={styles.headerValue}>R$ {totalOutcome.toFixed(2)}</Text>
       </View>
-      <View style={styles.headerItem}>
-        <Text style={styles.headerTitle}>Total</Text>
+      {/* <View style={styles.headerItem}>
+        <Text style={styles.headerTitle}>Saldo</Text>
         <Text style={styles.headerValue}>R$ {calculateTotal().toFixed(2)}</Text>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -55,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
+export default Balance;

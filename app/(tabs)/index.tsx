@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import AppHeader from '@/components/AppHeader';
+import { ScrollView ,View, StyleSheet } from 'react-native';
+import Balance from '@/components/Balance';
+import TotBalance from '@/components/TotalBalance';
 import TransactionForm from '@/components/TransactionForm';
 import TransactionList from '@/components/TransactionList';
+import YearSelect from '@/components/YearSelect';
+
 
 interface Transaction {
   description: string;
@@ -20,8 +23,8 @@ const App: React.FC = () => {
       type,
     };
     setTransactions([...transactions, newTransaction]);
-  };
-
+  }; 
+ 
   const handleDeleteTransaction = (index: number) => {
     setTransactions(transactions.filter((_, i) => i !== index));
   };
@@ -39,11 +42,13 @@ const App: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <AppHeader transactions={transactions} calculateTotal={calculateTotal} />
+    <ScrollView style={styles.container}>
+      <TotBalance transactions={transactions} />
+      <YearSelect />
       <TransactionForm onAddTransaction={handleAddTransaction} />
+      <Balance transactions={transactions} calculateTotal={calculateTotal} />
       <TransactionList transactions={transactions} onDeleteTransaction={handleDeleteTransaction} />
-    </View>
+    </ScrollView>
   );
 };
 
