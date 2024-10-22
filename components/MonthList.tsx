@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 const months = [
@@ -18,53 +18,45 @@ const months = [
   { label: 'Dezembro', value: 'dezembro' },
 ];
 
-const DropdownMonths = () => {
-  const [selectedMonth, setSelectedMonth] = useState(months[0].value);
+// Define os tipos das props
+interface DropdownMonthsProps {
+  selectedMonth: string;
+  onMonthChange: (month: string) => void;
+}
 
+const DropdownMonths: React.FC<DropdownMonthsProps> = ({ selectedMonth, onMonthChange }) => {
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.label}>Selecione um mês:</Text> */}
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={selectedMonth}
           style={styles.picker}
-          onValueChange={(itemValue, itemIndex) => setSelectedMonth(itemValue)}
+          onValueChange={onMonthChange}
         >
           {months.map((month) => (
             <Picker.Item key={month.value} label={month.label} value={month.value} />
           ))}
         </Picker>
       </View>
-    
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    
     justifyContent: 'center',
-    // paddingHorizontal: 20,
-  },
-  label: {
-    fontSize: 18,
-    marginBottom: 10,
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#ccc', // Cor da borda
-    borderRadius: 8, // Borda arredondada
-    paddingHorizontal: 10, // Preenchimento horizontal dentro do campo
-    backgroundColor: '#fff', // Cor de fundo branca, como um input
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
   },
   picker: {
     height: 50,
     width: '100%',
-    color: '#000', // Cor do texto
-  },
-  selectedText: {
-    margin: 20,
-    fontSize: 16,
+    color: '#000',
   },
 });
 

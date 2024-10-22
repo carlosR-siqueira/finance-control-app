@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import MonthList  from './MonthList';
-import YearSelect from './YearSelect';
-
+import DropdownMonths from './MonthList'; // Verifique se o caminho está correto
+import { writeTransaction } from '@/lib/firebaseService'; // Ajuste o caminho conforme necessário
 
 interface TransactionFormProps {
   onAddTransaction: (description: string, value: number, type: 'income' | 'outcome') => void;
@@ -13,27 +12,35 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
   const [newTransactionDescription, setNewTransactionDescription] = useState('');
   const [newTransactionValue, setNewTransactionValue] = useState('');
   const [newTransactionType, setNewTransactionType] = useState<'income' | 'outcome'>('income');
+  const [selectedMonth, setSelectedMonth] = useState('Escolha um Mês');
 
-  const [text, setText] = React.useState("")
-  const [number, setNumber] = React.useState("")
-
-  const handleAddTransaction = () => {
+  const handleAddTransaction = async () => {
     const value = parseFloat(newTransactionValue);
     
-    if (!newTransactionDescription || isNaN(value)) {
-      Alert.alert('Erro', 'Preencha todos os campos corretamente!');
+    if (!newTransactionDescription || isNaN(value) || selectedMonth === 'Escolha um Mês') {
+      Alert.alert('Erro', 'Preencha todos os campos corretamente e escolha um mês válido!');
       return;
     }
 
+    // Gerar um ID único para a transação (por exemplo, usando a data atual)
+    const transactionId = new Date().getTime().toString();
+
+    // Chamar a função para salvar a transação no Firebase
+    await writeTransaction(transactionId, newTransactionDescription, value, newTransactionType, selectedMonth);
+    
+    // Chamar a função de callback
     onAddTransaction(newTransactionDescription, value, newTransactionType);
+
+    // Resetar os campos do formulário
     setNewTransactionDescription('');
     setNewTransactionValue('');
     setNewTransactionType('income');
+    setSelectedMonth('Escolha um Mês');
   };
 
   return (
     <View style={styles.form}>
-      <MonthList />
+      <DropdownMonths selectedMonth={selectedMonth} onMonthChange={setSelectedMonth} />
       
       <TextInput
         mode='outlined'
@@ -43,7 +50,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
         label="Descrição"
         outlineColor='#ccc'
         activeOutlineColor='#4CAF50'
-        onChangeText={newTransactionDescription => setNewTransactionDescription(newTransactionDescription)}
+        onChangeText={setNewTransactionDescription}
       />
       <TextInput
         mode='outlined'
@@ -53,7 +60,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
         outlineColor='#ccc'
         activeOutlineColor='#4CAF50'
         label="Valor"
-        onChangeText={newTransactionValue => setNewTransactionValue(newTransactionValue)}
+        onChangeText={setNewTransactionValue}
         keyboardType="numeric"
       />
       <View style={styles.selectContainer}>
@@ -81,15 +88,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
 const styles = StyleSheet.create({
   form: {
     marginBottom: 20,
-    
   },
   input: {
-  borderRadius: 8,
-
+    borderRadius: 8,
   },
-
   inputBox: {
-    // marginVertical: 5,
+    marginVertical: 5,
   },
   selectContainer: {
     flexDirection: 'row',
@@ -128,7 +132,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     textAlign: 'center',
-
   },
 });
 

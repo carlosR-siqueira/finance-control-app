@@ -16,6 +16,8 @@ interface TransactionListProps {
 const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDeleteTransaction }) => {
   return (
     <View style={styles.container}>
+      <View><Text style={styles.headerText}>Transações recentes</Text></View>
+
       <View style={styles.header}>
         <Text style={styles.headerText}>Descrição</Text>
         <Text style={styles.headerText}>Valor</Text>
