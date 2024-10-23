@@ -1,24 +1,16 @@
 // lib/firebaseConfig.ts
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { 
-  FIREBASE_API_KEY, 
-  FIREBASE_AUTH_DOMAIN, 
-  FIREBASE_DATABASE_URL, 
-  FIREBASE_PROJECT_ID, 
-  FIREBASE_STORAGE_BUCKET, 
-  FIREBASE_MESSAGING_SENDER_ID, 
-  FIREBASE_APP_ID 
-} from '@env';
+
 
 const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  databaseURL: FIREBASE_DATABASE_URL,
-  projectId: FIREBASE_PROJECT_ID,
-  storageBucket: FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID
+  apiKey: "AIzaSyBug6PHwI7MvRf8ceElcFqaZqbMafXNGRg",
+  authDomain: "finace-control-app.firebaseapp.com",
+  databaseURL: "https://finace-control-app-default-rtdb.firebaseio.com",
+  projectId: "finace-control-app",
+  storageBucket: "finace-control-app.appspot.com",
+  messagingSenderId: "741642799744",
+  appId: "1:741642799744:web:f07dcb20f06ff14d16f465"
 };
 
 const app = initializeApp(firebaseConfig);
