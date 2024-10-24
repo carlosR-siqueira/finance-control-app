@@ -1,8 +1,7 @@
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/ca80118c-489a-4e2d-9602-7229e9ad8a42" alt="image" width="200" />
-</div>
 
 
+[https://github.com/user-attachments/assets/f3962878-327a-4df8-8194-03d0ec751f6f
+](https://github-production-user-asset-6210df.s3.amazonaws.com/112527934/379524805-f3962878-327a-4df8-8194-03d0ec751f6f.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20241024%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241024T024516Z&X-Amz-Expires=300&X-Amz-Signature=a99936be716481611f8cd206e2ed182f87d5a09773ddb4d6d6bf83cdf388cbb7&X-Amz-SignedHeaders=host)
 
 
 # Welcome to your Expo app 👋
