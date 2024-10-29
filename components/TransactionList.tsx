@@ -1,22 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import TransactionItem from './TransactionItem';
+import { subscribeToTransactions, Transaction } from '../api/getData';
+import { Button } from 'react-native-paper';
 
-interface Transaction {
-  description: string;
-  value: number;
-  type: 'income' | 'outcome';
-}
+const TransactionList: React.FC = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-interface TransactionListProps {
-  transactions: Transaction[];
-  onDeleteTransaction: (index: number) => void;
-}
+  useEffect(() => {
+    const unsubscribe = subscribeToTransactions(setTransactions);
 
-const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDeleteTransaction }) => {
+    // Limpa a subscrição ao desmontar o componente
+    return () => unsubscribe();
+  }, []);
+
+  // Filtra para mostrar apenas as cinco transações mais recentes
+  const recentTransactions = transactions
+    .sort((a, b) => b.timestamp - a.timestamp) // Ordena por timestamp (do mais recente para o mais antigo)
+    .slice(0, 5); // Pega apenas as cinco mais recentes
+
   return (
     <View style={styles.container}>
-      <View><Text style={styles.headerText}>Transações recentes</Text></View>
+      <Text style={styles.headerText}>Transações Recentes</Text>
 
       <View style={styles.header}>
         <Text style={styles.headerText}>Descrição</Text>
@@ -24,13 +29,22 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
         <Text style={styles.headerText}>Tipo</Text>
         <Text style={styles.headerText}>Ação</Text>
       </View>
-      {transactions.map((transaction, index) => (
-        <TransactionItem
-          key={index}
-          transaction={transaction}
-          onDelete={() => onDeleteTransaction(index)}
-        />
-      ))}
+
+      {recentTransactions.length === 0 ? (
+        <Text style={styles.emptyText}>Nenhuma transação registrada.</Text>
+      ) : (
+        recentTransactions.map((transaction, index) => (
+          <TransactionItem
+            key={transaction.timestamp} // Use o timestamp como key para garantir unicidade
+            transaction={transaction}
+            onDelete={() => console.log('Implementar delete')} // Ajuste conforme necessário
+          />
+        ))
+      )}
+
+      <Button style={styles.btn} icon="bank-transfer" mode="contained" onPress={() => console.log('Pressed')}>
+        Todas as Transações
+      </Button>
     </View>
   );
 };
@@ -38,8 +52,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical : 20,
-
+    marginVertical: 20,
   },
   header: {
     flexDirection: 'row',
@@ -50,9 +63,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
   headerText: {
-    flex: 1, // Cada coluna ocupa o mesmo espaço
+    flex: 1,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginVertical: 10,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#999',
+    marginVertical: 10,
+  },
+  btn: {
+    backgroundColor: '#4CAF50',
+    marginVertical: 10,
   },
 });
 

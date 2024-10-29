@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import DropdownMonths from './MonthList'; // Verifique se o caminho está correto
-import { writeTransaction } from '@/lib/firebaseService'; // Ajuste o caminho conforme necessário
+import { writeTransaction } from '../api/postData'; // Ajuste o caminho conforme necessário
 
 interface TransactionFormProps {
   onAddTransaction: (description: string, value: number, type: 'income' | 'outcome') => void;
@@ -17,16 +16,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
   const handleAddTransaction = async () => {
     const value = parseFloat(newTransactionValue);
     
-    if (!newTransactionDescription || isNaN(value) || selectedMonth === 'Escolha um Mês') {
-      Alert.alert('Erro', 'Preencha todos os campos corretamente e escolha um mês válido!');
-      return;
-    }
+    // if (!newTransactionDescription || isNaN(value) || selectedMonth === 'Escolha um Mês') {
+    //   Alert.alert('Erro', 'Preencha todos os campos corretamente e escolha um mês válido!');
+    //   return;
+    // }
 
     // Gerar um ID único para a transação (por exemplo, usando a data atual)
     const transactionId = new Date().getTime().toString();
 
     // Chamar a função para salvar a transação no Firebase
-    await writeTransaction(transactionId, newTransactionDescription, value, newTransactionType, selectedMonth);
+    await writeTransaction(transactionId, newTransactionDescription, value, newTransactionType);
     
     // Chamar a função de callback
     onAddTransaction(newTransactionDescription, value, newTransactionType);
@@ -40,7 +39,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
 
   return (
     <View style={styles.form}>
-      <DropdownMonths selectedMonth={selectedMonth} onMonthChange={setSelectedMonth} />
+      {/* <DropdownMonths selectedMonth={selectedMonth} onMonthChange={setSelectedMonth} /> */}
       
       <TextInput
         mode='outlined'

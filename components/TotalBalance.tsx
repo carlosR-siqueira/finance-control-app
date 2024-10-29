@@ -24,6 +24,7 @@ const TotalBalance: React.FC<TotalBalanceProps> = ({ transactions }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Saldo Total</Text>
       <Text style={styles.value}>R$ {totalBalance.toFixed(2)}</Text>
+      
     </View>
   );
 };
@@ -49,6 +50,10 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 22,
     color: 'green',
+  },
+  details: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
 
