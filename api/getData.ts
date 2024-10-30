@@ -1,4 +1,4 @@
-// firebaseApi.ts
+// getData.ts
 import { database } from '../lib/firebaseConfig'; // Ajuste o caminho para seu arquivo de configuração do Firebase
 import { ref, onValue } from 'firebase/database';
 
@@ -10,6 +10,7 @@ export interface Transaction {
   type: 'income' | 'outcome';
 }
 
+// Função para buscar as transações do ano e mês atuais
 export const subscribeToTransactions = (callback: (transactions: Transaction[]) => void) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -50,4 +51,30 @@ export const subscribeToTransactions = (callback: (transactions: Transaction[]) 
 
   return unsubscribe;
 };
- 
+
+// Função para buscar os anos disponíveis
+export const subscribeToYears = (callback: (years: string[]) => void) => {
+  const yearsRef = ref(database, '/'); // Ponto de partida para buscar os anos
+
+  const unsubscribe = onValue(yearsRef, (snapshot) => {
+    const data = snapshot.val();
+    const loadedYears = Object.keys(data || {}); // Obtém os anos como uma lista
+
+    callback(loadedYears);
+  });
+
+  return unsubscribe;
+};
+
+// Função para buscar os meses disponíveis para um ano específico
+export const subscribeToMonths = (year: string, callback: (months: string[]) => void) => {
+  const monthsRef = ref(database, `/${year}`); // Caminho para os meses do ano
+
+  const unsubscribe = onValue(monthsRef, (snapshot) => {
+    const data = snapshot.val();
+    const loadedMonths = Object.keys(data || {}); // Obtém os meses como uma lista
+    callback(loadedMonths);
+  });
+
+  return unsubscribe;
+};

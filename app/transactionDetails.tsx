@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import TransactionItem from './TransactionItem';
-import { subscribeToTransactions, Transaction } from '../api/getData';
+import TransactionItem from '../components/TransactionList';
+import { subscribeToTransactions, Transaction } from '../api/getData'; // Ajuste o caminho conforme necessário
 import { Button } from 'react-native-paper';
 import { Link } from 'expo-router';
 
-const TransactionList: React.FC = () => {
+interface TransactionDetailsProps {
+  month: string; // ou number, dependendo de como você está armazenando
+  year: string; // ou number
+}
+
+const TransactionDetails: React.FC<TransactionDetailsProps> = ({ month, year }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToTransactions(setTransactions);
+    const unsubscribe = subscribeToTransactions((allTransactions) => {
+      // Filtrar transações pelo mês e ano
+      const filteredTransactions = allTransactions.filter(transaction => {
+        const transactionDate = new Date(transaction.timestamp); // Certifique-se de que timestamp está no formato correto
+        return transactionDate.getMonth() === parseInt(month) && transactionDate.getFullYear() === parseInt(year);
+      });
+      setTransactions(filteredTransactions);
+    });
     return () => unsubscribe();
-  }, []);
-
-  const recentTransactions = transactions
-    .sort((a, b) => b.timestamp - a.timestamp)
-    .slice(0, 5);
+  }, [month, year]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Transações Recentes</Text>
+      <Text style={styles.headerText}>Transações para {month}/{year}</Text>
 
       <View style={styles.header}>
         <Text style={styles.headerText}>Descrição</Text>
@@ -28,10 +36,10 @@ const TransactionList: React.FC = () => {
         <Text style={styles.headerText}>Ação</Text>
       </View>
 
-      {recentTransactions.length === 0 ? (
+      {transactions.length === 0 ? (
         <Text style={styles.emptyText}>Nenhuma transação registrada.</Text>
       ) : (
-        recentTransactions.map((transaction) => (
+        transactions.map((transaction) => (
           <TransactionItem
             key={transaction.timestamp}
             transaction={transaction}
@@ -80,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TransactionList;
+export default TransactionDetails;

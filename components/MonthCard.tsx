@@ -1,11 +1,11 @@
-// app/(tabs)/explore.tsx
+// app/MonthListScreen.tsx
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { Avatar, Card, Button, Menu, Provider } from 'react-native-paper';
+import { Avatar, Card, IconButton, Menu, Button, Provider } from 'react-native-paper';
 import { subscribeToYears, subscribeToMonths } from '@/api/getData';
 import { useRouter } from 'expo-router';
 
-const ExploreScreen: React.FC = () => {
+const MonthListScreen: React.FC = () => {
   const [years, setYears] = useState<string[]>([]);
   const [months, setMonths] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
@@ -35,10 +35,7 @@ const ExploreScreen: React.FC = () => {
   }, [selectedYear]);
 
   const handleMonthPress = (month: string) => {
-    router.push({
-      pathname: '/transactionDetails', // Rota para a tela de detalhes das transações
-      params: { month, year: selectedYear }, // Passando o mês e o ano selecionado
-    });
+    router.push(`/transactionDetails?month=${month}&year=${selectedYear}`); // Passa o mês e o ano
   };
 
   return (
@@ -74,6 +71,7 @@ const ExploreScreen: React.FC = () => {
                 <Card.Title
                   title={item}
                   left={(props) => <Avatar.Icon {...props} icon="calendar-month" />}
+                  right={(props) => <IconButton {...props} icon="chevron-right" />}
                 />
               </Card>
             )}
@@ -98,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreScreen;
+export default MonthListScreen;

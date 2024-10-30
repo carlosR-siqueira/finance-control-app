@@ -16,10 +16,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
   const handleAddTransaction = async () => {
     const value = parseFloat(newTransactionValue);
     
-    // if (!newTransactionDescription || isNaN(value) || selectedMonth === 'Escolha um Mês') {
-    //   Alert.alert('Erro', 'Preencha todos os campos corretamente e escolha um mês válido!');
-    //   return;
-    // }
+    if (!newTransactionDescription || isNaN(value)) {
+      Alert.alert('Erro', 'Preencha todos os campos corretamente!');
+      return;
+    }
 
     // Gerar um ID único para a transação (por exemplo, usando a data atual)
     const transactionId = new Date().getTime().toString();
