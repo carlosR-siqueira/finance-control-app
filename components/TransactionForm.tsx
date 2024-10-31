@@ -48,16 +48,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
         value={newTransactionDescription}
         label="Descrição"
         outlineColor='#ccc'
-        activeOutlineColor='#4CAF50'
+        activeOutlineColor='#135e96'
         onChangeText={setNewTransactionDescription}
       />
       <TextInput
-        mode='outlined'
+        mode=  'outlined'
+
         style={styles.inputBox}
         outlineStyle={styles.input}
         value={newTransactionValue}
         outlineColor='#ccc'
-        activeOutlineColor='#4CAF50'
+        activeOutlineColor='#135e96'
         label="Valor"
         onChangeText={setNewTransactionValue}
         keyboardType="numeric"
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderRadius: 8,
+    
   },
   inputBox: {
     marginVertical: 5,
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
   },
   selectLabel: {
     fontSize: 16,
+    color: '#000',
   },
   selectButton: {
     padding: 10,
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   addButton: {
-    backgroundColor: '#24b2f9',
+    backgroundColor: '#135e96',
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,

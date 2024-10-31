@@ -1,4 +1,4 @@
-// getData.ts
+// api/getData.ts
 import { database } from '../lib/firebaseConfig'; // Ajuste o caminho para seu arquivo de configuração do Firebase
 import { ref, onValue } from 'firebase/database';
 

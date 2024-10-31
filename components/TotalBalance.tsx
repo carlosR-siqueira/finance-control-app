@@ -2,10 +2,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-interface TotalBalanceProps {
-  transactions: { value: number; type: 'income' | 'outcome' }[];
+interface Transaction {
+  description: string;
+  value: number;
+  type: 'income' | 'outcome';
 }
 
+interface TotalBalanceProps {
+  transactions: Transaction[];
+}
 const TotalBalance: React.FC<TotalBalanceProps> = ({ transactions }) => {
   // Calculando o saldo total
   const totalIncome = transactions.reduce((acc, transaction) =>

@@ -2,12 +2,18 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-interface HeaderProps {
-  transactions: { value: number; type: 'income' | 'outcome' }[];
+interface Transaction {
+  description: string;
+  value: number;
+  type: 'income' | 'outcome';
+}
+
+interface BalanceProps {
+  transactions: Transaction[];
   calculateTotal: () => number;
 }
 
-const Balance: React.FC<HeaderProps> = ({ transactions, calculateTotal }) => {
+const Balance: React.FC<BalanceProps> = ({ transactions, calculateTotal }) => {
   const totalIncome = transactions.reduce((acc, transaction) =>
     transaction.type === 'income' ? acc + transaction.value : acc,
     0,

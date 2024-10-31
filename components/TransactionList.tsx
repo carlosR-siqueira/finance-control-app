@@ -1,21 +1,28 @@
+// components/TransactionList.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import TransactionItem from './TransactionItem';
-import { subscribeToTransactions, Transaction } from '../api/getData';
+import {Transaction } from '../api/getData';
 import { Button } from 'react-native-paper';
 import { Link } from 'expo-router';
 
-const TransactionList: React.FC = () => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+// Defina a interface para as props do componente
+interface TransactionListProps {
+  transactions: Transaction[];
+  onDeleteTransaction: (timestamp: number) => void; // Adicionando tipo para a função de deletar
+}
+
+const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDeleteTransaction }) => {
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToTransactions(setTransactions);
-    return () => unsubscribe();
-  }, []);
-
-  const recentTransactions = transactions
-    .sort((a, b) => b.timestamp - a.timestamp)
-    .slice(0, 5);
+    // Atualiza as transações recentes toda vez que a lista de transações mudar
+    setRecentTransactions(
+      transactions
+        .sort((a, b) => b.timestamp - a.timestamp)
+        .slice(0, 5)
+    );
+  }, [transactions]); // Dependência de transactions
 
   return (
     <View style={styles.container}>
@@ -35,7 +42,7 @@ const TransactionList: React.FC = () => {
           <TransactionItem
             key={transaction.timestamp}
             transaction={transaction}
-            onDelete={() => console.log('Implementar delete')}
+            onDelete={() => onDeleteTransaction(transaction.timestamp)} // Chama a função de deletar
           />
         ))
       )}

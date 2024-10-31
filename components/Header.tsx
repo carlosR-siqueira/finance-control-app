@@ -27,10 +27,9 @@ const Header: React.FC<HeaderProps> = ({  userImage }) => {
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-  
     alignItems: 'center',
     padding: 15,
-    backgroundColor: '#135e96', // Customize com sua cor de fundo
+    backgroundColor: '#135e96', 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

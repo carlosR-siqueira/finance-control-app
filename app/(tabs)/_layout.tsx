@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
@@ -27,21 +27,28 @@ export default function TabLayout() {
           title: 'Início',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'logo-usd' : 'home-outline'} color={color} />
-            ),
-          }}
-          />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Lista de Transações',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name={'swap-vertical'} color={color} />
-            ),
-          }}
-          />
+        title: 'Lista de Transações',
+        tabBarIcon: ({ color }) => (
+        <TabBarIcon name={'swap-vertical'} color={color} />
+        ),
+        }}
+      />
+       <Tabs.Screen
+        name="transactionDetails"
+        options={{
+          href: null
+        }}
+      />
+          
+          
     </Tabs>
   </>
-
   );
 }
 

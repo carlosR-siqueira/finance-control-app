@@ -46,15 +46,18 @@ const ExploreScreen: React.FC = () => {
       <View style={styles.container}>
         <Menu
           visible={isYearMenuVisible}
+         
           onDismiss={() => setIsYearMenuVisible(false)}
+          
           anchor={
-            <Button mode="outlined" onPress={() => setIsYearMenuVisible(true)}>
+            <Button  mode="outlined" onPress={() => setIsYearMenuVisible(true)}>
               {selectedYear || 'Selecione o Ano'}
             </Button>
           }
         >
           {years.map((year) => (
             <Menu.Item
+              contentStyle={styles.btnList}
               key={year}
               onPress={() => {
                 setSelectedYear(year);
@@ -72,9 +75,12 @@ const ExploreScreen: React.FC = () => {
             renderItem={({ item }) => (
               <Card style={styles.card} onPress={() => handleMonthPress(item)}>
                 <Card.Title
+                 
+                  titleStyle={styles.cardTitle}
                   title={item}
-                  left={(props) => <Avatar.Icon {...props} icon="calendar-month" />}
-                />
+                  left={(props) => <Avatar.Icon color='#fff'  style={styles.icon} {...props} icon="calendar-month" />}
+                  right={(props) => <Avatar.Icon color='#fff'   {...props} icon="chevron-right" />}
+                  />
               </Card>
             )}
           />
@@ -88,14 +94,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
   },
   card: {
     marginVertical: 8,
     borderRadius: 8,
     backgroundColor: '#f8f8f8',
     elevation: 3,
+    
   },
+  cardTitle:{
+    color:  '#000',
+    fontWeight:  'bold',
+  },
+  icon:{
+    backgroundColor:  '#135e96',
+    marginRight:  8,
+    
+  },
+  btnList:{
+    justifyContent:  'center',
+    alignItems:  'center',
+    padding:  16,
+   
+  },
+
 });
 
 export default ExploreScreen;

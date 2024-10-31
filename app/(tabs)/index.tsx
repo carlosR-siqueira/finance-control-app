@@ -11,6 +11,7 @@ interface Transaction {
   description: string;
   value: number;
   type: 'income' | 'outcome';
+ 
 }
 
 const App: React.FC = () => {
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor:  '#fff',
+    backgroundColor:  '#f2f2f2',
   },
 });
 
