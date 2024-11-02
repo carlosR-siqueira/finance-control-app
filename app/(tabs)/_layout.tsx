@@ -26,7 +26,7 @@ export default function TabLayout() {
         options={{
           title: 'Início',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'logo-usd' : 'home-outline'} color={color} />
+            <TabBarIcon name={'logo-usd'} color={color} />
           ),
         }}
       />
