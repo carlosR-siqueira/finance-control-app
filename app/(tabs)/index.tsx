@@ -11,7 +11,6 @@ interface Transaction {
   description: string;
   value: number;
   type: 'income' | 'outcome';
- 
 }
 
 const App: React.FC = () => {
