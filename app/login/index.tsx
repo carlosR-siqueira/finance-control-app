@@ -1,19 +1,21 @@
+// app/login/index.tsx
+
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Login from '../../components/LoginComponent'; // Corrigido o nome da importação para Login
-import { loginUser } from '../../api/auth/auth'; // Função de login
-import { useRouter } from 'expo-router';  // Usando useRouter para navegação no expo-router
+import { View, StyleSheet } from 'react-native';
+import Login from '../../components/LoginComponent'; // Importação do componente de login
+import { loginUser } from '../../api/auth/authContext'; // Função de login do Firebase
+import { useRouter } from 'expo-router';  // Para navegação no expo-router
 
 const LoginScreen: React.FC = () => {
-  const [error, setError] = useState('');
-  const router = useRouter();  // Navegação com o useRouter
+  const [error, setError] = useState(''); // Estado para mensagens de erro
+  const router = useRouter();
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      await loginUser(email, password); // Chama a função loginUser
-      router.push('/index'); // Após o login, redireciona para a página principal (ou home)
+      await loginUser(email, password); // Executa a função de login
+      router.push('/(tabs)'); // Redireciona para a página principal após o login
     } catch (error: any) {
-      setError(error.message); // Exibe a mensagem de erro, caso ocorra
+      setError(error.message); // Exibe uma mensagem de erro caso o login falhe
     }
   };
 

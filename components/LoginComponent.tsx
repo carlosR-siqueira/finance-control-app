@@ -1,70 +1,101 @@
 import React, { useState } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  StyleSheet,
+  RefreshControl,
+  ScrollView,
 } from 'react-native';
-import { useRouter } from 'expo-router'; // Importando useRouter para navegação
+import { useRouter } from 'expo-router';
 
 type LoginProps = {
-  onLogin: (email: string, password: string) => void; // Função para login
-  errorMessage: string; // Mensagem de erro
+  onLogin: (email: string, password: string) => void;
+  errorMessage: string;
 };
 
 const Login: React.FC<LoginProps> = ({ onLogin, errorMessage }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();  // Usando o hook useRouter
+  const [refreshing, setRefreshing] = useState(false);
+  const router = useRouter();
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 1000); // Simulando uma atualização
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <View style={styles.userImage}>
-          <Image
-            source={require('../assets/images/icon.png')}
-            style={styles.image}
-          />
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <View style={styles.container}>
+          <View style={styles.userImage}>
+            <Image
+              source={require('../assets/images/icon.png')}
+              style={styles.image}
+            />
+          </View>
+          
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              autoCapitalize="none"
+              placeholderTextColor="#000"
+              value={email}
+              onChangeText={setEmail}
+            />
+            
+            <TextInput
+              style={styles.input}
+              placeholder="Senha"
+              autoCapitalize="none"
+              secureTextEntry
+              placeholderTextColor="#000"
+              value={password}
+              onChangeText={setPassword}
+            />
+            
+            {errorMessage ? (
+              <Text style={styles.error}>{errorMessage}</Text>
+            ) : null}
+            
+            <TouchableOpacity
+              style={styles.buttonForm}
+              onPress={() => onLogin(email, password)}
+            >
+              <Text style={styles.textButton}>Entrar</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity onPress={() => router.push("/signup")}>
+              <Text style={styles.buttonCreate}>Ainda não possui uma conta!</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            autoCapitalize="none"
-            placeholderTextColor="#000"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            autoCapitalize="none"
-            secureTextEntry
-            placeholderTextColor="#000"
-            value={password}
-            onChangeText={setPassword}
-          />
-          {errorMessage ? (
-            <Text style={styles.error}>{errorMessage}</Text>
-          ) : null}
-          <TouchableOpacity
-            style={styles.buttonForm}
-            onPress={() => onLogin(email, password)} // Chama a função onLogin
-          >
-            <Text style={styles.textButton}>Entrar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/')}> {/* Usando router.push no lugar de navigation.navigate */}
-            <Text style={styles.buttonCreate}>Ainda não possui uma conta!</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
+    backgroundColor: '#135e96',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#006660',
+    paddingVertical: 40,
+    paddingHorizontal:  60,
+
   },
   userImage: {
     alignItems: 'center',
@@ -74,8 +105,7 @@ const styles = StyleSheet.create({
     width: 170,
     height: 170,
     borderRadius: 100,
-    marginBottom: 54,
-    marginTop: 60,
+    marginBottom: 40,
   },
   image: {
     width: 108,
@@ -83,7 +113,7 @@ const styles = StyleSheet.create({
   },
   form: {
     alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
   },
   input: {
     backgroundColor: '#FFF',
