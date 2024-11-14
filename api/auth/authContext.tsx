@@ -1,4 +1,6 @@
-import { auth } from '../../lib/firebaseConfig';
+//api/auth/AuthContext.tsx
+import { ref, set } from 'firebase/database';
+import { auth, database  } from '../../lib/firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
@@ -28,21 +30,22 @@ export const loginUser = async (email: string, password: string): Promise<User |
 export const createUser = async (email: string, password: string): Promise<User | undefined> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
+    const user = userCredential.user;
+
+    // Salvar os dados do usuário no Realtime Database
+    if (user) {
+      await set(ref(database, `users/${user.uid}`), {
+        email: user.email,
+        createdAt: new Date().toISOString(),
+        uid: user.uid,
+      });
+    }
+
+    return user;
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
-
-// Função de logout
-export const logoutUser = async () => {
-  try {
-    await auth.signOut();
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
-
 // O AuthProvider que gerencia o estado de autenticação
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
