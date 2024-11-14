@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, ScrollView } from 'react-native';
-import { Card, Button, Paragraph } from 'react-native-paper';
+import { Card, Button, Paragraph, IconButton } from 'react-native-paper';
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { subscribeToTransactions, Transaction } from '@/api/getAllData';
 
@@ -32,7 +32,11 @@ const TransactionDetails: React.FC = () => {
             <Card.Title 
               title={transaction.description} 
               subtitle={transaction.type === 'income' ? 'Entrada' : 'Saída'} 
+              right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
+              
             />
+
+            
             <Card.Content>
               <Paragraph>Valor: R$ {transaction.value.toFixed(2)}</Paragraph>
               <Paragraph>Data: {new Date(transaction.timestamp).toLocaleDateString()}</Paragraph>
@@ -40,6 +44,8 @@ const TransactionDetails: React.FC = () => {
           </Card>
         ))
       )}
+
+          
 
       <Link href="/explore" asChild>
         <Button style={styles.btn} icon="bank-transfer" mode="contained">
@@ -77,7 +83,8 @@ const styles = StyleSheet.create({
   },
   btn: {
     backgroundColor: '#4CAF50',
-    marginTop: 20,
+    marginVertical: 30,
+    
   },
 });
 

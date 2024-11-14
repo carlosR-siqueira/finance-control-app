@@ -4,7 +4,7 @@ import { auth, database  } from '../../lib/firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-// Defina o tipo do contexto, incluindo as funções e dados do estado
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -13,7 +13,7 @@ interface AuthContextType {
   logoutUser: () => Promise<void>;
 }
 
-// Cria o contexto com valores padrão
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Função de login

@@ -1,5 +1,4 @@
-// api/getAllData.ts
-import { database } from '../lib/firebaseConfig'; // Ajuste o caminho para seu arquivo de configuração do Firebase
+import { database } from '../lib/firebaseConfig';
 import { ref, onValue } from 'firebase/database';
 import { auth } from '../lib/firebaseConfig';
 
@@ -11,23 +10,21 @@ export interface Transaction {
   type: 'income' | 'outcome';
 }
 
-// Função para buscar as transações de um ano e mês específicos para o usuário logado
 export const subscribeToTransactions = (year: string, month: string, callback: (transactions: Transaction[]) => void) => {
   const user = auth.currentUser;
 
   if (!user) {
-    console.error("Usuário não autenticado.");
-    return () => {}; // Retorna uma função de cancelamento vazia se o usuário não estiver autenticado
+    console.error("Erro: Usuário não autenticado.");
+    return () => {};
   }
 
   const uid = user.uid;
 
   if (!year || !month) {
     console.error("Ano ou mês inválido.");
-    return () => {}; // Retorna uma função vazia se os parâmetros não forem válidos
+    return () => {};
   }
 
-  // Ref para o nó do usuário logado no ano e mês específicos
   const transactionsRef = ref(database, `users/${uid}/transactions/${year}/${month}`);
 
   const unsubscribe = onValue(transactionsRef, (snapshot) => {
@@ -50,9 +47,7 @@ export const subscribeToTransactions = (year: string, month: string, callback: (
       });
     }
 
-    // Ordena as transações pelo timestamp (do mais recente para o mais antigo)
     loadedTransactions.sort((a, b) => b.timestamp - a.timestamp);
-
     callback(loadedTransactions);
   });
 
