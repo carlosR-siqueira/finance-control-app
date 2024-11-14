@@ -1,3 +1,5 @@
+//components/TransactionForm.tsx
+
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
