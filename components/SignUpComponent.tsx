@@ -10,19 +10,20 @@ import {
 } from 'react-native';
 
 type SignUpFormProps = {
-  onSignUp: (email: string, password: string) => void;
+  onSignUp: (email: string, password: string, Name: string) => void;
   errorMessage: string;
 };
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, errorMessage }) => {
   const [email, setEmail] = useState('');
+  const [Name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
 
   const handleSignUp = () => {
     if (password === confirmPassword) {
-      onSignUp(email, password);
+      onSignUp(email, password, Name);
     } else {
       setIsPasswordMatch(false);
     }
@@ -36,6 +37,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, errorMessage }) => {
               style={styles.image}
             />
           </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Nome"
+            value={Name}
+            onChangeText={setName}
+            autoCapitalize="none"
+          />
       <TextInput
         style={styles.input}
         placeholder="Email"

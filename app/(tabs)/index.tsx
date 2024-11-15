@@ -5,7 +5,7 @@ import TotBalance from '@/components/TotalBalance';
 import TransactionForm from '@/components/TransactionForm';
 import TransactionList from '@/components/TransactionList';
 import YearSelect from '@/components/YearSelect';
-import { subscribeToTransactions } from '@/api/getData';
+import { subscribeToTransactions } from '@/api/database/getData';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 

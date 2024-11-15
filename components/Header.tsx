@@ -1,29 +1,47 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import UserAvatar from '../components/UserAvatarComponent';
+import { UserNameApi } from '../api/database/getUserData';
+import { Link } from 'expo-router';
 
 type HeaderProps = {
   userImage: string;
 };
 
-const Header: React.FC<HeaderProps> = ({  userImage }) => {
+const Header: React.FC<HeaderProps> = ({ userImage }) => {
+  const [name, setName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = UserNameApi((fetchedName) => {
+      setName(fetchedName);
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <View style={styles.headerContainer}>
-      <View  style={styles.imgContainer}>
-
-      <Image
-        source={require('../assets/images/icon.png')} // Substitua pelo caminho do seu logo
-        style={styles.logo}
+      <View style={styles.imgContainer}>
+        <Image
+          source={require('../assets/images/icon.png')} // Substitua pelo caminho do seu logo
+          style={styles.logo}
         />
-        </View>
-        <View  style={styles.titleContainer}>
-
-         <Text style={styles.appName}>Finance Control App</Text>
-        </View>
-      
+      </View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.appName}>Finance Control</Text>
+      </View>
+      <Link href={'/(tabs)/profile'}>
+      <View style={styles.avatarContainer}>
+        <UserAvatar />
+        <Text style={styles.userName}>
+          {name ? ` ${name}` : 'Carregando...'}
+        </Text>
+      </View>
+      </Link>
     </View>
   );
 };
-
+ 
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
@@ -38,29 +56,43 @@ const styles = StyleSheet.create({
    
   },
   imgContainer:{
-    flex:  1,
+
     justifyContent: 'center',
-    marginLeft:  10,
+ 
 
   },
   logo: {
-    width: 50,
-    height: 50, // Customize o tamanho do logo
+    width: 40,
+    height: 40, // Customize o tamanho do logo
   },
 
   titleContainer:{
-    flex: 2.5,
+    flex: 3,
+    alignItems: 'baseline'
    
   },
   appName: {
  
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
-    color: '#fff', // Customize a cor do nome do app
+    color: '#fff', 
     // textAlign: 'center',
+    
   },
- 
-  
+
+  avatarContainer:{
+    flex: 1,
+   alignItems:'center',
+   gap: 5,
+  flexDirection: 'row-reverse',
+    
+  }, 
+
+  userName:{
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'left'
+  }
 });
 
 export default Header;

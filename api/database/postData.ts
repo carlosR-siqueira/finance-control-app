@@ -1,6 +1,6 @@
-import { database } from '../lib/firebaseConfig';
+import { database } from '../../lib/firebaseConfig';
 import { ref, set } from 'firebase/database';
-import { auth } from '../lib/firebaseConfig';
+import { auth } from '../../lib/firebaseConfig';
 
 export const writeTransaction = async (
   transactionId: string,

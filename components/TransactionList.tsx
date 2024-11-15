@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import TransactionItem from './TransactionItem';
-import {Transaction } from '../api/getData';
+import {Transaction } from '../api/database/getData';
 import { Button } from 'react-native-paper';
 import { Link } from 'expo-router';
 

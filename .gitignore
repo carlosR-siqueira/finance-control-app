@@ -21,3 +21,6 @@ expo-env.d.ts
 
 # .gitignore
 .env
+
+
+supabase-storage-test

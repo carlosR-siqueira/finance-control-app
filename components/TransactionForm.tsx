@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { writeTransaction } from '../api/postData'; // Ajuste o caminho conforme necessário
+import { writeTransaction } from '../api/database/postData'; // Ajuste o caminho conforme necessário
 
 interface TransactionFormProps {
   onAddTransaction: (description: string, value: number, type: 'income' | 'outcome') => void;

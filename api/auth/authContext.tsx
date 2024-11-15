@@ -1,18 +1,16 @@
 //api/auth/AuthContext.tsx
 import { ref, set } from 'firebase/database';
-import { auth, database  } from '../../lib/firebaseConfig';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
+import { auth, database } from '../../lib/firebaseConfig';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged, User } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   loginUser: (email: string, password: string) => Promise<User | undefined>;
-  createUser: (email: string, password: string) => Promise<User | undefined>;
+  createUser: (email: string, password: string, name: string) => Promise<User | undefined>;
   logoutUser: () => Promise<void>;
 }
-
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -27,15 +25,19 @@ export const loginUser = async (email: string, password: string): Promise<User |
 };
 
 // Função de criação de usuário
-export const createUser = async (email: string, password: string): Promise<User | undefined> => {
+export const createUser = async (email: string, password: string, name: string): Promise<User | undefined> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Salvar os dados do usuário no Realtime Database
     if (user) {
+    
+      await updateProfile(user, { displayName: name});
+
+      // Salvar os dados do usuário no Realtime Database
       await set(ref(database, `users/${user.uid}`), {
         email: user.email,
+        name, // Usar o nome fornecido no form
         createdAt: new Date().toISOString(),
         uid: user.uid,
       });
@@ -46,6 +48,9 @@ export const createUser = async (email: string, password: string): Promise<User 
     throw new Error(error.message);
   }
 };
+
+
+
 // O AuthProvider que gerencia o estado de autenticação
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

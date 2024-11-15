@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Avatar, Card, IconButton, Menu, Button, Provider } from 'react-native-paper';
-import { subscribeToYears, subscribeToMonths } from '@/api/getData';
+import { subscribeToYears, subscribeToMonths } from '@/api/database/getData';
 import { useRouter } from 'expo-router';
 
 const MonthListScreen: React.FC = () => {
