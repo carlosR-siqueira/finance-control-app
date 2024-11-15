@@ -1,7 +1,11 @@
 import { supabase } from '../../lib/supabaseClient';
 
+
+
 export const uploadImageToSupabase = async (file: Blob, userId: string): Promise<string | null> => {
   const fileName = `${userId}-${Date.now()}.jpg`; // Nome único para evitar conflitos
+
+
 
   // Upload do arquivo para o Supabase Storage
   const { data, error } = await supabase.storage

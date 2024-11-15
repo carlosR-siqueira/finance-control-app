@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import UserAvatar from '../components/UserAvatarComponent';
 import { UserNameApi } from '../api/database/getUserData';
+import { Link } from 'expo-router';
 
 type HeaderProps = {
   userImage: string;
@@ -29,12 +30,14 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
       <View style={styles.titleContainer}>
         <Text style={styles.appName}>Finance Control</Text>
       </View>
+      <Link href={'/(tabs)/profile'}>
       <View style={styles.avatarContainer}>
         <UserAvatar />
         <Text style={styles.userName}>
           {name ? ` ${name}` : 'Carregando...'}
         </Text>
       </View>
+      </Link>
     </View>
   );
 };

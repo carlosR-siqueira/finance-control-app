@@ -3,19 +3,73 @@ import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImageToSupabase } from '../api/storage/imgUpload'; 
-import Balance from './PerfilBalance';
+import Balance from './PerfilBalance'; // Certifique-se de que o caminho está correto
 import { UserNameApi } from '../api/database/getUserData';
-
+import { auth } from '@/lib/firebaseConfig'; // Assumindo que você usa Firebase para autenticação
+import { subscribeToTransactions, Transaction } from '../api/database/getData';
 
 const ProfileView = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null); // Para armazenar a URL da imagem
-  const [loading, setLoading] = useState<boolean>(false); // Para indicar que o upload está em andamento
-  const [transactions, setTransactions] = useState([
-    { description: 'Venda', value: 100, type: 'income' },
-    { description: 'Compra', value: 50, type: 'outcome' },
-  ]);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]); // Adicionando estado para transações
+  const [name, setName] = useState<string | null>(null);
 
-  // Função para calcular o saldo total (entrada - saída)
+  const handleImageUpload = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Desculpe, precisamos da permissão para acessar a galeria.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const uri = result.assets[0].uri;
+      setLoading(true);
+
+      try {
+        const userId = auth.currentUser?.uid;
+
+        if (userId) {
+          const file = await fetch(uri);
+          const blob = await file.blob();
+          
+          const publicUrl = await uploadImageToSupabase(blob, userId);
+
+          if (publicUrl) {
+            setProfileImage(publicUrl);
+          }
+        } else {
+          alert('Usuário não autenticado.');
+        }
+      } catch (error) {
+        console.error('Erro no upload:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // Inscrição para buscar e atualizar o nome do usuário
+    const unsubscribeUserName = UserNameApi((fetchedName) => {
+      setName(fetchedName);
+    });
+
+    // Inscrição para buscar e atualizar as transações do usuário
+    const unsubscribeTransactions = subscribeToTransactions((fetchedTransactions: React.SetStateAction<Transaction[]>) => {
+      setTransactions(fetchedTransactions);
+    });
+
+    return () => {
+      unsubscribeUserName();
+      unsubscribeTransactions();
+    };
+  }, []);
+
+  // Função para calcular o saldo total
   const calculateTotal = () => {
     const totalIncome = transactions.reduce(
       (acc, transaction) => (transaction.type === 'income' ? acc + transaction.value : acc),
@@ -27,51 +81,6 @@ const ProfileView = () => {
     );
     return totalIncome - totalOutcome;
   };
-
-  const handleImageUpload = async () => {
-    // Solicitar permissão para acessar a galeria de imagens
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Desculpe, precisamos da permissão para acessar a galeria.');
-      return;
-    }
-
-    // Permitir que o usuário escolha uma imagem
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Corrigido para 'mediaTypes'
-    });
-
-    // Verificar se a seleção não foi cancelada
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      const uri = result.assets[0].uri; // Acessar o URI da imagem
-
-      setLoading(true); // Ativar o carregamento enquanto faz o upload
-      try {
-        // Realizar o upload da imagem para o Supabase
-        const file = await fetch(uri); // Obter a imagem como arquivo
-        const blob = await file.blob(); // Converter para blob
-        const publicUrl = await uploadImageToSupabase(blob, 'user123'); // Exemplo de userId
-
-        if (publicUrl) {
-          setProfileImage(publicUrl); // Atualiza a imagem no estado com a URL pública
-        }
-      } catch (error) {
-        console.error('Erro no upload:', error);
-      } finally {
-        setLoading(false); // Desativa o carregamento
-      }
-    }
-  };
-
-  const [name, setName] = useState<string | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = UserNameApi((fetchedName) => {
-      setName(fetchedName);
-    });
-
-    return unsubscribe;
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -98,8 +107,10 @@ const ProfileView = () => {
       </View>
 
       <View style={styles.profileDetail}>
-        <Balance transactions={transactions} calculateTotal={calculateTotal} />
-        
+        <Text>
+
+        <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
+        </Text>
       </View>
     </View>
   );
@@ -157,6 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     shadowRadius: 2,
     elevation: 3,
+    padding: 10,
   },
 });
 
