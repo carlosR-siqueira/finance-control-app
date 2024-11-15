@@ -9,7 +9,7 @@ interface AuthContextType {
   loading: boolean;
   loginUser: (email: string, password: string) => Promise<User | undefined>;
   createUser: (email: string, password: string, name: string) => Promise<User | undefined>;
-  logoutUser: () => Promise<void>;
+ 
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,21 +25,22 @@ export const loginUser = async (email: string, password: string): Promise<User |
 };
 
 // Função de criação de usuário
-export const createUser = async (email: string, password: string, name: string): Promise<User | undefined> => {
+export const createUser = async (email: string, password: string, name: string, profileImageUrl?: string): Promise<User | undefined> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
     if (user) {
-    
-      await updateProfile(user, { displayName: name});
+      // Atualizar o nome do usuário
+      await updateProfile(user, { displayName: name });
 
-      // Salvar os dados do usuário no Realtime Database
+      // Salvar os dados do usuário no Realtime Database, incluindo a URL da imagem de perfil
       await set(ref(database, `users/${user.uid}`), {
         email: user.email,
         name, // Usar o nome fornecido no form
         createdAt: new Date().toISOString(),
         uid: user.uid,
+        profileImageUrl: profileImageUrl || null, // Se tiver URL da imagem, adiciona; caso contrário, deixa como null
       });
     }
 
@@ -48,6 +49,7 @@ export const createUser = async (email: string, password: string, name: string):
     throw new Error(error.message);
   }
 };
+
 
 
 
@@ -71,7 +73,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     loading,
     loginUser,
     createUser,
-    logoutUser,
+    
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -3,16 +3,43 @@ import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImageToSupabase } from '../api/storage/imgUpload'; 
-import Balance from './PerfilBalance'; // Certifique-se de que o caminho está correto
-import { UserNameApi } from '../api/database/getUserData';
-import { auth } from '@/lib/firebaseConfig'; // Assumindo que você usa Firebase para autenticação
+import Balance from './PerfilBalance'
+import { UserNameApi, UserProfileImageApi } from '../api/database/getUserData'; 
+import { auth } from '@/lib/firebaseConfig'; 
 import { subscribeToTransactions, Transaction } from '../api/database/getData';
+import { updateUserProfileImage } from '../api/database/imgUrlToDatabase';  
+import UserInfo from './UserInfoComponent'
 
 const ProfileView = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(null); // Armazena a URL da imagem de perfil
   const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]); // Adicionando estado para transações
   const [name, setName] = useState<string | null>(null);
+
+  // Função para buscar a imagem de perfil do Firebase
+  useEffect(() => {
+    // Busca a URL da imagem de perfil assim que o componente for montado
+    const unsubscribeProfileImage = UserProfileImageApi((fetchedImageUrl) => {
+      setProfileImage(fetchedImageUrl);
+    });
+
+    // Inscrição para buscar e atualizar o nome do usuário
+    const unsubscribeUserName = UserNameApi((fetchedName) => {
+      setName(fetchedName);
+    });
+
+    // Inscrição para buscar e atualizar as transações do usuário
+    const unsubscribeTransactions = subscribeToTransactions((fetchedTransactions: React.SetStateAction<Transaction[]>) => {
+      setTransactions(fetchedTransactions);
+    });
+
+    // Limpa as inscrições quando o componente for desmontado
+    return () => {
+      unsubscribeProfileImage();
+      unsubscribeUserName();
+      unsubscribeTransactions();
+    };
+  }, []);
 
   const handleImageUpload = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -20,26 +47,26 @@ const ProfileView = () => {
       alert('Desculpe, precisamos da permissão para acessar a galeria.');
       return;
     }
-
+  
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
-
+  
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const uri = result.assets[0].uri;
       setLoading(true);
-
+  
       try {
         const userId = auth.currentUser?.uid;
-
         if (userId) {
-          const file = await fetch(uri);
-          const blob = await file.blob();
-          
-          const publicUrl = await uploadImageToSupabase(blob, userId);
-
+          // Realiza o upload da imagem para o Supabase e pega a URL pública
+          const publicUrl = await uploadImageToSupabase(uri, userId);
+  
           if (publicUrl) {
             setProfileImage(publicUrl);
+  
+            // Atualiza a URL da imagem de perfil no Firebase Realtime Database
+            await updateUserProfileImage(publicUrl);
           }
         } else {
           alert('Usuário não autenticado.');
@@ -51,23 +78,6 @@ const ProfileView = () => {
       }
     }
   };
-
-  useEffect(() => {
-    // Inscrição para buscar e atualizar o nome do usuário
-    const unsubscribeUserName = UserNameApi((fetchedName) => {
-      setName(fetchedName);
-    });
-
-    // Inscrição para buscar e atualizar as transações do usuário
-    const unsubscribeTransactions = subscribeToTransactions((fetchedTransactions: React.SetStateAction<Transaction[]>) => {
-      setTransactions(fetchedTransactions);
-    });
-
-    return () => {
-      unsubscribeUserName();
-      unsubscribeTransactions();
-    };
-  }, []);
 
   // Função para calcular o saldo total
   const calculateTotal = () => {
@@ -108,9 +118,11 @@ const ProfileView = () => {
 
       <View style={styles.profileDetail}>
         <Text>
-
-        <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
+          <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
         </Text>
+      </View>
+      <View style={styles.userInfoContainer}>
+      <UserInfo  />
       </View>
     </View>
   );
@@ -149,7 +161,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: 10,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#135e96',
     borderRadius: 15,
     padding: 5,
   },
@@ -170,6 +182,9 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: 10,
   },
+  userInfoContainer:{
+    marginVertical: 60,
+  }
 });
 
 export default ProfileView;

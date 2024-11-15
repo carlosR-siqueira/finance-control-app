@@ -31,42 +31,42 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, errorMessage }) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.userImage}>
-            <Image
-              source={require('../assets/images/icon.png')}
-              style={styles.image}
-            />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome"
-            value={Name}
-            onChangeText={setName}
-            autoCapitalize="none"
-          />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirme a senha"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        autoCapitalize="none"
-      />
+      <View style={styles.userImage}>
+        <Image
+          source={require('../assets/images/icon.png')}
+          style={styles.image}
+        />
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Nome"
+          value={Name}
+          onChangeText={setName}
+          autoCapitalize="none"
+        /> 
+        <TextInput
+         style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirme a senha"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          autoCapitalize="none"
+        />
       {!isPasswordMatch && (
         <Text style={styles.error}>As senhas não coincidem</Text>
       )}

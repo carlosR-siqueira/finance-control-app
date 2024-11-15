@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import UserAvatar from '../components/UserAvatarComponent';
 import { UserNameApi } from '../api/database/getUserData';
 import { Link } from 'expo-router';
@@ -13,8 +13,16 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
 
   useEffect(() => {
     const unsubscribe = UserNameApi((fetchedName) => {
-      setName(fetchedName);
+      if (fetchedName) {
+      const name = fetchedName.split(' ') 
+      const twoNames = name.length > 1 ? `${name[0] } ${name[1]}` : null;
+      setName(twoNames);
+      } else{
+        setName(null)
+      }
     });
+
+
 
     return unsubscribe;
   }, []);
@@ -32,10 +40,19 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
       </View>
       <Link href={'/(tabs)/profile'}>
       <View style={styles.avatarContainer}>
-        <UserAvatar />
+       
+        <View>
+        <Text style={styles.welcome}>
+          Seja Bem-Vindo!
+        </Text>
         <Text style={styles.userName}>
           {name ? ` ${name}` : 'Carregando...'}
         </Text>
+        </View>
+        <View style={styles.userImgContainer}>
+        <UserAvatar />
+
+        </View>
       </View>
       </Link>
     </View>
@@ -58,12 +75,14 @@ const styles = StyleSheet.create({
   imgContainer:{
 
     justifyContent: 'center',
+    
  
 
   },
   logo: {
     width: 40,
-    height: 40, // Customize o tamanho do logo
+    height: 40, 
+    
   },
 
   titleContainer:{
@@ -81,17 +100,30 @@ const styles = StyleSheet.create({
   },
 
   avatarContainer:{
-    flex: 1,
+   flex: 1,
    alignItems:'center',
    gap: 5,
-  flexDirection: 'row-reverse',
+   flexDirection: 'row',
+   
     
   }, 
+
+  welcome:{
+    color: '#fff',
+    opacity: 0.7,
+    
+  },
 
   userName:{
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'left'
+    textAlign: 'right'
+   
+  },
+  userImgContainer:{
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: '#4CAF50'
   }
 });
 
