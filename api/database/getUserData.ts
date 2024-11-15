@@ -25,3 +25,27 @@ export const UserNameApi = (callback: (name: string | null) => void) => {
 
   return unsubscribe;
 };
+
+// Função para assinar e obter a URL da imagem de perfil do usuário
+export const UserProfileImageApi = (callback: (imageUrl: string | null) => void) => {
+  const user = auth.currentUser;
+  if (!user) {
+    console.error('Erro: Usuário não autenticado');
+    callback(null);
+    return () => {};
+  }
+
+  const uid = user.uid;
+  const userProfileImageRef = ref(database, `users/${uid}/profileImageUrl`);
+
+  const unsubscribe = onValue(userProfileImageRef, (snapshot) => {
+    const imageUrl = snapshot.val();
+    if (imageUrl) {
+      callback(imageUrl);
+    } else {
+      callback(null);
+    }
+  });
+
+  return unsubscribe;
+};

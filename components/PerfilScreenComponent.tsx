@@ -4,15 +4,41 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImageToSupabase } from '../api/storage/imgUpload'; 
 import Balance from './PerfilBalance'; // Certifique-se de que o caminho está correto
-import { UserNameApi } from '../api/database/getUserData';
+import { UserNameApi, UserProfileImageApi } from '../api/database/getUserData'; // Importando a API para pegar o nome e a imagem de perfil
 import { auth } from '@/lib/firebaseConfig'; // Assumindo que você usa Firebase para autenticação
 import { subscribeToTransactions, Transaction } from '../api/database/getData';
+import { updateUserProfileImage } from '../api/database/imgUrlToDatabase';  // Importe a função para atualizar a imagem no Firebase
 
 const ProfileView = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(null); // Armazena a URL da imagem de perfil
   const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]); // Adicionando estado para transações
   const [name, setName] = useState<string | null>(null);
+
+  // Função para buscar a imagem de perfil do Firebase
+  useEffect(() => {
+    // Busca a URL da imagem de perfil assim que o componente for montado
+    const unsubscribeProfileImage = UserProfileImageApi((fetchedImageUrl) => {
+      setProfileImage(fetchedImageUrl);
+    });
+
+    // Inscrição para buscar e atualizar o nome do usuário
+    const unsubscribeUserName = UserNameApi((fetchedName) => {
+      setName(fetchedName);
+    });
+
+    // Inscrição para buscar e atualizar as transações do usuário
+    const unsubscribeTransactions = subscribeToTransactions((fetchedTransactions: React.SetStateAction<Transaction[]>) => {
+      setTransactions(fetchedTransactions);
+    });
+
+    // Limpa as inscrições quando o componente for desmontado
+    return () => {
+      unsubscribeProfileImage();
+      unsubscribeUserName();
+      unsubscribeTransactions();
+    };
+  }, []);
 
   const handleImageUpload = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -31,15 +57,15 @@ const ProfileView = () => {
 
       try {
         const userId = auth.currentUser?.uid;
-
         if (userId) {
-          const file = await fetch(uri);
-          const blob = await file.blob();
-          
-          const publicUrl = await uploadImageToSupabase(blob, userId);
+          // Realiza o upload da imagem para o Supabase e pega a URL pública
+          const publicUrl = await uploadImageToSupabase(uri, userId);
 
           if (publicUrl) {
             setProfileImage(publicUrl);
+
+            // Atualiza a URL da imagem de perfil no Firebase Realtime Database
+            await updateUserProfileImage(publicUrl);
           }
         } else {
           alert('Usuário não autenticado.');
@@ -51,23 +77,6 @@ const ProfileView = () => {
       }
     }
   };
-
-  useEffect(() => {
-    // Inscrição para buscar e atualizar o nome do usuário
-    const unsubscribeUserName = UserNameApi((fetchedName) => {
-      setName(fetchedName);
-    });
-
-    // Inscrição para buscar e atualizar as transações do usuário
-    const unsubscribeTransactions = subscribeToTransactions((fetchedTransactions: React.SetStateAction<Transaction[]>) => {
-      setTransactions(fetchedTransactions);
-    });
-
-    return () => {
-      unsubscribeUserName();
-      unsubscribeTransactions();
-    };
-  }, []);
 
   // Função para calcular o saldo total
   const calculateTotal = () => {
@@ -108,8 +117,7 @@ const ProfileView = () => {
 
       <View style={styles.profileDetail}>
         <Text>
-
-        <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
+          <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
         </Text>
       </View>
     </View>

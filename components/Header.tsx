@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import UserAvatar from '../components/UserAvatarComponent';
 import { UserNameApi } from '../api/database/getUserData';
 import { Link } from 'expo-router';
