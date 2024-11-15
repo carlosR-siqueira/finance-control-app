@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, ScrollView } from 'react-native';
 import { Card, Button, Paragraph, IconButton } from 'react-native-paper';
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
-import { subscribeToTransactions, Transaction } from '@/api/getAllData';
+import { subscribeToTransactions, Transaction } from '@/api/database/getAllData';
 
 const TransactionDetails: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);

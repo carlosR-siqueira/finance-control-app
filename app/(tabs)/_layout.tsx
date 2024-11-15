@@ -1,6 +1,6 @@
 import { Stack, Tabs } from 'expo-router';
 import React from 'react';
-
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -36,6 +36,15 @@ export default function TabLayout() {
         title: 'Lista de Transações',
         tabBarIcon: ({ color }) => (
         <TabBarIcon name={'swap-vertical'} color={color} />
+        ),
+        }}
+      />
+      <Tabs.Screen
+        name="perfilScreen"
+        options={{
+        title: 'Perfil',
+        tabBarIcon: ({ color }) => (
+        <MaterialCommunityIcons name={'account'} size={30} color={color} />
         ),
         }}
       />
