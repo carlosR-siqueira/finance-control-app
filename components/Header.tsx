@@ -32,10 +32,19 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
       </View>
       <Link href={'/(tabs)/profile'}>
       <View style={styles.avatarContainer}>
-        <UserAvatar />
+       
+        <View>
+        <Text style={styles.welcome}>
+          Seja Bem-Vindo!
+        </Text>
         <Text style={styles.userName}>
           {name ? ` ${name}` : 'Carregando...'}
         </Text>
+        </View>
+        <View>
+        <UserAvatar />
+
+        </View>
       </View>
       </Link>
     </View>
@@ -81,17 +90,23 @@ const styles = StyleSheet.create({
   },
 
   avatarContainer:{
-    flex: 1,
+   flex: 1,
    alignItems:'center',
    gap: 5,
-  flexDirection: 'row-reverse',
+   flexDirection: 'row',
     
   }, 
+
+  welcome:{
+    color: '#fff',
+    opacity: 0.7,
+    
+  },
 
   userName:{
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'left'
+   
   }
 });
 

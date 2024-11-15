@@ -46,24 +46,24 @@ const ProfileView = () => {
       alert('Desculpe, precisamos da permissão para acessar a galeria.');
       return;
     }
-
+  
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
-
+  
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const uri = result.assets[0].uri;
       setLoading(true);
-
+  
       try {
         const userId = auth.currentUser?.uid;
         if (userId) {
           // Realiza o upload da imagem para o Supabase e pega a URL pública
           const publicUrl = await uploadImageToSupabase(uri, userId);
-
+  
           if (publicUrl) {
             setProfileImage(publicUrl);
-
+  
             // Atualiza a URL da imagem de perfil no Firebase Realtime Database
             await updateUserProfileImage(publicUrl);
           }

@@ -1,25 +1,23 @@
-//api/database/imgUrlToDatabase.ts
+// api/database/imgUrlToDatabase.ts
+import { ref, set } from 'firebase/database';
+import { auth, database } from '../../lib/firebaseConfig';  // Caminho correto para a configuração do Firebase
 
-import { getDatabase, ref, update } from 'firebase/database';
-import { auth } from '../../lib/firebaseConfig';
+// Função para atualizar a URL da imagem de perfil no Firebase
+export const updateUserProfileImage = async (imageUrl: string) => {
+  const user = auth.currentUser;
+  if (!user) {
+    console.error('Usuário não autenticado');
+    return;
+  }
 
-export const updateUserProfileImage = async (imageUrl: string): Promise<void> => {
+  const userId = user.uid;
+  const userProfileImageRef = ref(database, `users/${userId}/profileImageUrl`);
+
   try {
-    const userId = auth.currentUser?.uid;
-    if (!userId) {
-      throw new Error('Usuário não autenticado.');
-    }
-
-    const db = getDatabase();
-    const userRef = ref(db, `users/${userId}`);
-
-    await update(userRef, {
-      profileImageUrl: imageUrl,
-    });
-
-    console.log('Imagem de perfil atualizada com sucesso!');
+    // Atualiza a URL da imagem no Firebase
+    await set(userProfileImageRef, imageUrl);
+    console.log('URL da imagem de perfil atualizada no Firebase com sucesso');
   } catch (error) {
-    console.error('Erro ao atualizar a imagem de perfil:', error);
-    throw error;
+    console.error('Erro ao atualizar URL no Firebase:', error);
   }
 };
