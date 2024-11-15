@@ -49,3 +49,27 @@ export const UserProfileImageApi = (callback: (imageUrl: string | null) => void)
 
   return unsubscribe;
 };
+
+// Função para assinar e obter o email do usuário
+export const UserEmailApi = (callback: (email: string | null) => void) => {
+  const user = auth.currentUser;
+  if (!user) {
+    console.error('Erro: Usuário não autenticado');
+    callback(null);
+    return () => {};
+  }
+
+  const uid = user.uid;
+  const userEmailRef = ref(database, `users/${uid}/email`);
+
+  const unsubscribe = onValue(userEmailRef, (snapshot) => {
+    const email = snapshot.val();
+    if (email) {
+      callback(email);
+    } else {
+      callback(null);
+    }
+  });
+
+  return unsubscribe;
+};

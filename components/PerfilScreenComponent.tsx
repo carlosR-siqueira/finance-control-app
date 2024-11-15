@@ -3,11 +3,12 @@ import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImageToSupabase } from '../api/storage/imgUpload'; 
-import Balance from './PerfilBalance'; // Certifique-se de que o caminho está correto
-import { UserNameApi, UserProfileImageApi } from '../api/database/getUserData'; // Importando a API para pegar o nome e a imagem de perfil
-import { auth } from '@/lib/firebaseConfig'; // Assumindo que você usa Firebase para autenticação
+import Balance from './PerfilBalance'
+import { UserNameApi, UserProfileImageApi } from '../api/database/getUserData'; 
+import { auth } from '@/lib/firebaseConfig'; 
 import { subscribeToTransactions, Transaction } from '../api/database/getData';
-import { updateUserProfileImage } from '../api/database/imgUrlToDatabase';  // Importe a função para atualizar a imagem no Firebase
+import { updateUserProfileImage } from '../api/database/imgUrlToDatabase';  
+import UserInfo from './UserInfoComponent'
 
 const ProfileView = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null); // Armazena a URL da imagem de perfil
@@ -120,6 +121,9 @@ const ProfileView = () => {
           <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
         </Text>
       </View>
+      <View style={styles.userInfoContainer}>
+      <UserInfo  />
+      </View>
     </View>
   );
 };
@@ -157,7 +161,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: 10,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#135e96',
     borderRadius: 15,
     padding: 5,
   },
@@ -178,6 +182,9 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: 10,
   },
+  userInfoContainer:{
+    marginVertical: 60,
+  }
 });
 
 export default ProfileView;

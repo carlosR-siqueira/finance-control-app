@@ -13,8 +13,16 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
 
   useEffect(() => {
     const unsubscribe = UserNameApi((fetchedName) => {
-      setName(fetchedName);
+      if (fetchedName) {
+      const name = fetchedName.split(' ') 
+      const twoNames = name.length > 1 ? `${name[0] } ${name[1]}` : null;
+      setName(twoNames);
+      } else{
+        setName(null)
+      }
     });
+
+
 
     return unsubscribe;
   }, []);
@@ -41,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
           {name ? ` ${name}` : 'Carregando...'}
         </Text>
         </View>
-        <View>
+        <View style={styles.userImgContainer}>
         <UserAvatar />
 
         </View>
@@ -67,12 +75,14 @@ const styles = StyleSheet.create({
   imgContainer:{
 
     justifyContent: 'center',
+    
  
 
   },
   logo: {
     width: 40,
-    height: 40, // Customize o tamanho do logo
+    height: 40, 
+    
   },
 
   titleContainer:{
@@ -94,6 +104,7 @@ const styles = StyleSheet.create({
    alignItems:'center',
    gap: 5,
    flexDirection: 'row',
+   
     
   }, 
 
@@ -106,7 +117,13 @@ const styles = StyleSheet.create({
   userName:{
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'right'
    
+  },
+  userImgContainer:{
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: '#4CAF50'
   }
 });
 
