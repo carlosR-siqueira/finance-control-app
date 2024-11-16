@@ -11,9 +11,9 @@ import { updateUserProfileImage } from '../api/database/imgUrlToDatabase';
 import UserInfo from './UserInfoComponent'
 
 const ProfileView = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null); // Armazena a URL da imagem de perfil
+  const [profileImage, setProfileImage] = useState<string | null>(null); 
   const [loading, setLoading] = useState<boolean>(false);
-  const [transactions, setTransactions] = useState<Transaction[]>([]); // Adicionando estado para transações
+  const [transactions, setTransactions] = useState<Transaction[]>([]); 
   const [name, setName] = useState<string | null>(null);
 
   // Função para buscar a imagem de perfil do Firebase

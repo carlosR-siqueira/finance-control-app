@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ userImage }) => {
     <View style={styles.headerContainer}>
       <View style={styles.imgContainer}>
         <Image
-          source={require('../assets/images/icon.png')} // Substitua pelo caminho do seu logo
+          source={require('../assets/images/icon.png')} 
           style={styles.logo}
         />
       </View>
@@ -69,16 +69,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    elevation: 2, // Elevação para efeito de sombra no Android
+    elevation: 2, 
    
   },
   imgContainer:{
-
-    justifyContent: 'center',
-    
- 
-
+    marginLeft: -10
   },
+  
   logo: {
     width: 40,
     height: 40, 
@@ -86,7 +83,7 @@ const styles = StyleSheet.create({
   },
 
   titleContainer:{
-    flex: 3,
+    flex: 1,
     alignItems: 'baseline'
    
   },
@@ -95,17 +92,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     color: '#fff', 
-    // textAlign: 'center',
+    
     
   },
 
   avatarContainer:{
-   flex: 1,
+  
    alignItems:'center',
    gap: 5,
    flexDirection: 'row',
-   
-    
+  
   }, 
 
   welcome:{
@@ -123,7 +119,8 @@ const styles = StyleSheet.create({
   userImgContainer:{
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: '#4CAF50'
+    borderColor: '#4CAF50',
+    marginRight: 20
   }
 });
 

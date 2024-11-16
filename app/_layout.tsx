@@ -7,8 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
-import { auth } from '@/lib/firebaseConfig';
-import { onAuthStateChanged, User } from 'firebase/auth'; // Importa o tipo User do firebase/auth
+import { User } from 'firebase/auth'; // Importa o tipo User do firebase/auth
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 SplashScreen.preventAutoHideAsync();
@@ -29,26 +28,8 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  useEffect(() => {
-    // Observa mudanças na autenticação do Firebase
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      if (initializing) setInitializing(false);
-      if (user) {
-        // Se o usuário estiver autenticado, redireciona para a tela principal
-        router.replace('/(tabs)');
-      } else if (!user && !initializing) {
-        // Se o usuário não estiver autenticado, redireciona para a tela de login
-        router.replace('/login');
-      }
-    });
+ 
 
-    return unsubscribe;
-  }, [initializing, router]);
-
-  if (!loaded || initializing) {
-    return null; // Exibe uma tela de carregamento enquanto o Firebase verifica o status
-  }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

@@ -13,12 +13,18 @@ export default function TabLayout() {
 
   return (
   <>
-    <View style={styles.header}>
+    <View >
     <Header  userImage="https://example.com/user-photo.jpg" />
     </View>
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
+        tabBarStyle: {
+          backgroundColor: Colors[colorScheme ?? 'light'].background,
+          borderTopWidth: 0, // Mantém um visual mais limpo
+          elevation: 5, // Adiciona um pouco de sombra para destacar a tab bar
+        },
         headerShown: false,
       }}>
       <Tabs.Screen
@@ -26,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: 'Início',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={'logo-usd'} color={color} />
+            <TabBarIcon name={"home"} color={color} />
           ),
         }}
       />
@@ -62,9 +68,7 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-     marginTop: 30,
-  },
+ 
   
 
 });
