@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Card } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { UserNameApi, UserEmailApi } from '../api/database/getUserData';
-import { fontConfig } from 'react-native-paper/lib/typescript/styles/fonts';
+import { logoutUser } from '@/api/auth/authContext';
+
 
 const UserInfo = () => {
   const [name, setName] = useState<string | null>(null);
@@ -22,6 +23,15 @@ const UserInfo = () => {
       unsubscribeEmail();
     };
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+     
+    } catch (error) {
+      console.error('Erro ao tentar sair:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -55,7 +65,7 @@ const UserInfo = () => {
         <Button icon="account-edit" contentStyle={{flexDirection: 'row-reverse'}} textColor='#fff' style={styles.btn} mode="elevated" onPress={() => console.log('Pressed')}>
          Editar Perfil
         </Button>
-        <Button icon="logout-variant" contentStyle={{flexDirection: 'row-reverse'}}  textColor='#fff' style={styles.btn} mode="elevated" onPress={() => console.log('Pressed')}>
+        <Button icon="logout-variant" contentStyle={{flexDirection: 'row-reverse'}}  textColor='#fff' style={styles.btn} mode="elevated" onPress={handleLogout}>
         Sair
         </Button>
       </View>
