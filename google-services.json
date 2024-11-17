@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "741642799744",
+    "firebase_url": "https://finace-control-app-default-rtdb.firebaseio.com",
+    "project_id": "finace-control-app",
+    "storage_bucket": "finace-control-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741642799744:android:85e51e51933d8bf116f465",
+        "android_client_info": {
+          "package_name": "com.carlos_siqueira.financecontrol"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqJawQ97wiPtHvkOOoFBqgn6Cd7WnrMzc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
