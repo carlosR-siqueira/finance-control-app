@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 3,
     borderColor: '#4CAF50',
-    marginRight: 20
+   
   }
 });
 
