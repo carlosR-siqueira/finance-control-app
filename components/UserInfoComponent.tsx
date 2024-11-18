@@ -42,6 +42,7 @@ const UserInfo = () => {
           subtitle={name || 'Nome não disponível'}
           titleStyle={styles.title}
           subtitleStyle={styles.subtitle}
+          subtitleNumberOfLines={2}
           left={(props) => (
             <Avatar.Icon {...props} color={'#f8f8f8'} style={styles.cardIcon} icon="account" />
           )}
@@ -55,6 +56,7 @@ const UserInfo = () => {
           title="Email"
           titleStyle={styles.title}
           subtitleStyle={styles.subtitle}
+          subtitleNumberOfLines={2}
           left={(props) => (
             <Avatar.Icon {...props} color={'#f8f8f8'} style={styles.cardIcon} icon="email" />
           )}
@@ -77,10 +79,11 @@ const UserInfo = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    gap: 5,
+ 
   },
   card: {
     backgroundColor: '#fff',
+    marginVertical: 5, // Espaçamento entre os cards
   },
   cardIcon: {
     backgroundColor: '#135e96',
@@ -90,25 +93,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 17,
     marginTop: -7,
-   
-
+    flexWrap: 'wrap', // Permite que o texto quebre para a próxima linha
   },
   title: {
     fontSize: 16,
     color: '#888',
-   
-
+    flexWrap: 'wrap', // Permite que o texto quebre para a próxima linha
   },
-  btnContainer:{
+  btnContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 20,
   },
-  btn:{
+  btn: {
     backgroundColor: '#135e96',
-    width: 150
+    width: 150,
   },
-
 });
 
 export default UserInfo;

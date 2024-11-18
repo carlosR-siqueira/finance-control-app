@@ -13,9 +13,9 @@ export default function TabLayout() {
 
   return (
   <>
-    <View >
+    
     <Header  userImage="https://example.com/user-photo.jpg" />
-    </View>
+    
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,

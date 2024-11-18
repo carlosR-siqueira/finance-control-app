@@ -112,7 +112,13 @@ const ProfileView = () => {
               <Icon name="camera-outline" size={25} color="#fff" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.name}>{name ? ` ${name}` : 'Carregando...'}</Text>
+          <Text 
+            style={styles.name} 
+            numberOfLines={2} 
+            ellipsizeMode="tail"
+>
+            {name ? name : 'Carregando...'}
+          </Text>
         </View>
       </View>
 
@@ -121,7 +127,7 @@ const ProfileView = () => {
           <Balance transactions={transactions} calculateTotal={calculateTotal} /> {/* Exibindo Balance com dados reais */}
         </Text>
       </View>
-      <View style={styles.userInfoContainer}>
+      <View >
       <UserInfo  />
       </View>
     </View>
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#f9f9f9',
-    height: 240,
+    height: 245,
   },
   headerContent: {
     padding: 30,
@@ -166,25 +172,24 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   name: {
-    fontSize: 22,
+    fontSize: 21,
     color: '#000',
     fontWeight: '600',
+    textAlign: 'center',
+
   },
   profileDetail: {
     alignSelf: 'center',
-    marginTop: 210,
+    marginTop: -25, 
     alignItems: 'center',
     flexDirection: 'row',
-    position: 'absolute',
     backgroundColor: '#fff',
     borderRadius: 7,
     shadowRadius: 2,
     elevation: 3,
     padding: 10,
   },
-  userInfoContainer:{
-    marginVertical: 60,
-  }
+
 });
 
 export default ProfileView;
