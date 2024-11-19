@@ -3,6 +3,7 @@ import { Avatar, Button, Card } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { UserNameApi, UserEmailApi } from '../api/database/getUserData';
 import { logoutUser } from '@/api/auth/authContext';
+import { Link, router } from 'expo-router';
 
 
 const UserInfo = () => {
@@ -63,10 +64,11 @@ const UserInfo = () => {
         />
       </Card>
       <View style={styles.btnContainer}>
-
-        <Button icon="account-edit" contentStyle={{flexDirection: 'row-reverse'}} textColor='#fff' style={styles.btn} mode="elevated" onPress={() => console.log('Pressed')}>
+      <Link href="/editProfile" asChild>
+        <Button icon="account-edit" contentStyle={{flexDirection: 'row-reverse'}} textColor='#fff' style={styles.btn} mode="elevated">
          Editar Perfil
         </Button>
+        </Link>    
         <Button icon="logout-variant" contentStyle={{flexDirection: 'row-reverse'}}  textColor='#fff' style={styles.btn} mode="elevated" onPress={handleLogout}>
         Sair
         </Button>

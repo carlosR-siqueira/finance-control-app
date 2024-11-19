@@ -120,7 +120,7 @@ const ProfileView = () => {
             {name ? name : 'Carregando...'}
           </Text>
         </View>
-      </View>
+      </View> 
 
       <View style={styles.profileDetail}>
         <Text>
