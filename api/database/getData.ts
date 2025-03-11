@@ -12,47 +12,48 @@ export interface Transaction {
 
 export const subscribeToTransactions = (callback: (transactions: Transaction[]) => void) => {
   const user = auth.currentUser;
+
   if (!user) {
-    console.error('Erro: Usuário não autenticado');
+    console.error("Erro: Usuário não autenticado.");
     return () => {};
   }
 
   const uid = user.uid;
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const monthNames = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-  ];
-  const currentMonth = monthNames[currentDate.getMonth()];
-  const transactionsRef = ref(database, `users/${uid}/transactions/${currentYear}/${currentMonth}`);
+  const transactionsRef = ref(database, `users/${uid}/transactions`);
 
   const unsubscribe = onValue(transactionsRef, (snapshot) => {
     const data = snapshot.val();
     const loadedTransactions: Transaction[] = [];
 
     if (data) {
-      ['Entrada', 'Saida'].forEach((tipo) => {
-        if (data[tipo]) {
-          Object.values(data[tipo]).forEach((item: any) => {
-            loadedTransactions.push({
-              description: item.description,
-              value: item.value,
-              month: item.month,
-              type: tipo === 'Entrada' ? 'income' : 'outcome',
-              timestamp: item.timestamp,
-            });
+      Object.keys(data).forEach((year) => {
+        Object.keys(data[year]).forEach((month) => {
+          ['Entrada', 'Saida'].forEach((tipo) => {
+            if (data[year][month][tipo]) {
+              Object.values(data[year][month][tipo]).forEach((item: any) => {
+                loadedTransactions.push({
+                  description: item.description,
+                  value: item.value,
+                  month,
+                  type: tipo === 'Entrada' ? 'income' : 'outcome',
+                  timestamp: item.timestamp,
+                });
+              });
+            }
           });
-        }
+        });
       });
     }
 
-    loadedTransactions.sort((a, b) => b.timestamp - a.timestamp);
+    // Ordena por timestamp (mais antigas primeiro)
+    loadedTransactions.sort((a, b) => a.timestamp - b.timestamp);
+    
     callback(loadedTransactions);
   });
 
   return unsubscribe;
 };
+
 
 export const subscribeToYears = (callback: (years: string[]) => void) => {
   const user = auth.currentUser;

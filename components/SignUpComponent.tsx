@@ -1,3 +1,5 @@
+//components/signUpComponent.tsx
+
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -36,7 +38,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, errorMessage }) => {
           source={require('../assets/images/icon.png')}
           style={styles.image}
         />
-        </View>
+      </View>
         <TextInput
           style={styles.input}
           placeholder="Nome"

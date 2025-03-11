@@ -44,24 +44,25 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
       {/* <DropdownMonths selectedMonth={selectedMonth} onMonthChange={setSelectedMonth} /> */}
       
       <TextInput
-        mode='outlined'
-        style={styles.inputBox}
-        outlineStyle={styles.input}
+        mode="outlined"
+        style={[styles.inputBox, { backgroundColor: 'transparent' }]} // Garante fundo transparente para não sobrepor o label
         value={newTransactionDescription}
         label="Descrição"
-        outlineColor='#ccc'
-        activeOutlineColor='#135e96'
+        outlineColor="#ccc"
+        activeOutlineColor="#135e96"
+        textColor="#000" // Força a cor do texto para evitar que suma no modo escuro
+        theme={{ colors: { primary: '#135e96', text: '#000' } }} // Ajusta o tema
         onChangeText={setNewTransactionDescription}
       />
       <TextInput
-        mode=  'outlined'
-
-        style={styles.inputBox}
-        outlineStyle={styles.input}
+        mode="outlined"
+        style={[styles.inputBox, { backgroundColor: 'transparent' }]}
         value={newTransactionValue}
-        outlineColor='#ccc'
-        activeOutlineColor='#135e96'
         label="Valor"
+        outlineColor="#ccc"
+        activeOutlineColor="#135e96"
+        textColor="#000"
+        theme={{ colors: { primary: '#135e96', text: '#000' } }}
         onChangeText={setNewTransactionValue}
         keyboardType="numeric"
       />

@@ -1,101 +1,71 @@
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity,
   TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
+  TouchableOpacity,
   StyleSheet,
-  RefreshControl,
-  ScrollView,
+  Image
 } from 'react-native';
-import { useRouter } from 'expo-router';
 
-type LoginProps = {
+type LoginFormProps = {
   onLogin: (email: string, password: string) => void;
   errorMessage: string;
 };
 
-const Login: React.FC<LoginProps> = ({ onLogin, errorMessage }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin, errorMessage }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
-  const router = useRouter();
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000); // Simulando uma atualização
+  const handleLogin = () => {
+    onLogin(email, password);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
-        <View style={styles.container}>
-          <View style={styles.userImage}>
-            <Image
-              source={require('../assets/images/icon.png')}
-              style={styles.image}
-            />
-          </View>
-          
-          <View style={styles.form}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              autoCapitalize="none"
-              placeholderTextColor="#000"
-              value={email}
-              onChangeText={setEmail}
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Senha"
-              autoCapitalize="none"
-              secureTextEntry
-              placeholderTextColor="#000"
-              value={password}
-              onChangeText={setPassword}
-            />
-            
-            {errorMessage ? (
-              <Text style={styles.error}>{errorMessage}</Text>
-            ) : null}
-            
-            <TouchableOpacity
-              style={styles.buttonForm}
-              onPress={() => onLogin(email, password)}
-            >
-              <Text style={styles.textButton}>Entrar</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => router.push("/signup")}>
-              <Text style={styles.buttonCreate}>Ainda não possui uma conta!</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      <View style={styles.userImage}>
+        <Image
+          source={require('../assets/images/icon.png')}
+          style={styles.image}
+        />
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Senha"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        autoCapitalize="none"
+      />
+      {errorMessage ? (
+        <Text style={styles.error}>{errorMessage}</Text>
+      ) : null}
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push('/signup')}>
+        <Text style={styles.link}>Não tem uma conta? Cadastre-se</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: '#135e96',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 40,
-    paddingHorizontal:  60,
-
+    paddingHorizontal: 60,
   },
   userImage: {
     alignItems: 'center',
@@ -111,10 +81,6 @@ const styles = StyleSheet.create({
     width: 108,
     height: 108,
   },
-  form: {
-    alignItems: 'center',
-    width: '100%',
-  },
   input: {
     backgroundColor: '#FFF',
     width: 250,
@@ -123,7 +89,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 13,
   },
-  buttonForm: {
+  button: {
     backgroundColor: '#00229A',
     width: 100,
     height: 30,
@@ -132,11 +98,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textButton: {
+  buttonText: {
     color: '#FFF',
     fontWeight: 'bold',
   },
-  buttonCreate: {
+  link: {
     color: '#FFF',
     fontWeight: 'bold',
     marginTop: 18,
@@ -147,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default LoginForm;

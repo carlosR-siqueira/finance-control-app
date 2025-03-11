@@ -3,6 +3,7 @@ import { Avatar, Button, Card } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { UserNameApi, UserEmailApi } from '../api/database/getUserData';
 import { logoutUser } from '@/api/auth/authContext';
+import { Link, router } from 'expo-router';
 
 
 const UserInfo = () => {
@@ -42,6 +43,7 @@ const UserInfo = () => {
           subtitle={name || 'Nome não disponível'}
           titleStyle={styles.title}
           subtitleStyle={styles.subtitle}
+          subtitleNumberOfLines={2}
           left={(props) => (
             <Avatar.Icon {...props} color={'#f8f8f8'} style={styles.cardIcon} icon="account" />
           )}
@@ -55,16 +57,18 @@ const UserInfo = () => {
           title="Email"
           titleStyle={styles.title}
           subtitleStyle={styles.subtitle}
+          subtitleNumberOfLines={2}
           left={(props) => (
             <Avatar.Icon {...props} color={'#f8f8f8'} style={styles.cardIcon} icon="email" />
           )}
         />
       </Card>
       <View style={styles.btnContainer}>
-
-        <Button icon="account-edit" contentStyle={{flexDirection: 'row-reverse'}} textColor='#fff' style={styles.btn} mode="elevated" onPress={() => console.log('Pressed')}>
+      <Link href="/editProfile" asChild>
+        <Button icon="account-edit" contentStyle={{flexDirection: 'row-reverse'}} textColor='#fff' style={styles.btn} mode="elevated">
          Editar Perfil
         </Button>
+        </Link>    
         <Button icon="logout-variant" contentStyle={{flexDirection: 'row-reverse'}}  textColor='#fff' style={styles.btn} mode="elevated" onPress={handleLogout}>
         Sair
         </Button>
@@ -77,10 +81,11 @@ const UserInfo = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    gap: 5,
+ 
   },
   card: {
     backgroundColor: '#fff',
+    marginVertical: 5, // Espaçamento entre os cards
   },
   cardIcon: {
     backgroundColor: '#135e96',
@@ -90,25 +95,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 17,
     marginTop: -7,
-   
-
+    flexWrap: 'wrap', // Permite que o texto quebre para a próxima linha
   },
   title: {
     fontSize: 16,
     color: '#888',
-   
-
+    flexWrap: 'wrap', // Permite que o texto quebre para a próxima linha
   },
-  btnContainer:{
+  btnContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 20,
   },
-  btn:{
+  btn: {
     backgroundColor: '#135e96',
-    width: 150
+    width: 150,
   },
-
 });
 
 export default UserInfo;
