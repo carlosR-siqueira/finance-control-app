@@ -47,7 +47,8 @@ export const subscribeToTransactions = (year: string, month: string, callback: (
       });
     }
 
-    loadedTransactions.sort((a, b) => b.timestamp - a.timestamp);
+    loadedTransactions.sort((a, b) => a.timestamp - b.timestamp);
+
     callback(loadedTransactions);
   });
 
