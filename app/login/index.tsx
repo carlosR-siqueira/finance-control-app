@@ -1,7 +1,6 @@
 // app/login/index.tsx
-
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Login from '../../components/LoginComponent'; // Importação do componente de login
 import { loginUser } from '../../api/auth/authContext'; // Função de login do Firebase
 import { useRouter } from 'expo-router';  // Para navegação no expo-router
@@ -20,9 +19,7 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    
-      <Login onLogin={handleLogin} errorMessage={error} />
-    
+    <Login onLogin={handleLogin} errorMessage={error} />
   );
 };
 

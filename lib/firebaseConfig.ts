@@ -1,12 +1,9 @@
 // lib/firebaseConfig.ts
 import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import {
-  getAuth,
-  initializeAuth,
-  getReactNativePersistence,
-} from "firebase/auth";
+import { getAuth, initializeAuth } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getReactNativePersistence } from "firebase/auth";
 
 // Configuração do Firebase
 const firebaseConfig = {
@@ -28,12 +25,9 @@ if (!getApps().length) {
 }
 
 // Inicializa o Auth com persistência do AsyncStorage
-let auth = getAuth(app); // Placeholder
-if (!getApps().length) {
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
-}
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage), // Usando AsyncStorage para persistência
+});
 
 // Inicializa o Realtime Database
 const database = getDatabase(app);

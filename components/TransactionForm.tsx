@@ -1,5 +1,3 @@
-//components/TransactionForm.tsx
-
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
@@ -51,7 +49,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
         outlineColor="#ccc"
         activeOutlineColor="#135e96"
         textColor="#000" // Força a cor do texto para evitar que suma no modo escuro
-        theme={{ colors: { primary: '#135e96', text: '#000' } }} // Ajusta o tema
+        theme={{
+          colors: {
+            primary: '#135e96', // Cor do contorno ao focar
+            text: '#000',       // Cor do texto
+            // background: 'transparent', // Evita que o fundo do input seja alterado
+          },
+        }} // Ajusta o tema
         onChangeText={setNewTransactionDescription}
       />
       <TextInput
@@ -62,7 +66,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
         outlineColor="#ccc"
         activeOutlineColor="#135e96"
         textColor="#000"
-        theme={{ colors: { primary: '#135e96', text: '#000' } }}
+        theme={{
+          colors: {
+            primary: '#135e96', // Cor do contorno ao focar
+            text: '#000',       // Cor do texto
+            // background: 'transparent', // Evita que o fundo do input seja alterado
+          },
+        }}
         onChangeText={setNewTransactionValue}
         keyboardType="numeric"
       />
@@ -92,12 +102,10 @@ const styles = StyleSheet.create({
   form: {
     marginBottom: 20,
   },
-  input: {
-    borderRadius: 8,
-    
-  },
   inputBox: {
     marginVertical: 5,
+    borderRadius: 8,
+    paddingLeft: 10, // Garante o espaçamento entre o texto e a borda
   },
   selectContainer: {
     flexDirection: 'row',

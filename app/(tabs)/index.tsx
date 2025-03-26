@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, StyleSheet, RefreshControl, ActivityIndicator, Text } from 'react-native';
+import { ScrollView, View, StyleSheet, RefreshControl, ActivityIndicator, Text, BackHandler, Alert } from 'react-native';
 import Balance from '@/components/Balance';
 import TotBalance from '@/components/TotalBalance';
 import TransactionForm from '@/components/TransactionForm';
@@ -8,7 +8,6 @@ import YearSelect from '@/components/YearSelect';
 import { subscribeToTransactions } from '@/api/database/getData';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'expo-router';
-
 
 interface Transaction {
   description: string;
@@ -40,6 +39,37 @@ const App: React.FC = () => {
   useEffect(() => {
     const unsubscribe = subscribeToTransactions(setTransactions);
     return () => unsubscribe();
+  }, []);
+
+  // Interceptando o botão de voltar
+  useEffect(() => {
+    const backAction = () => {
+      if (auth.currentUser) {
+        Alert.alert(
+          "Sair",
+          "Você deseja sair do aplicativo?",
+          [
+            {
+              text: "Cancelar",
+              onPress: () => null,
+              style: "cancel",
+            },
+            {
+              text: "Sair",
+              onPress: () => BackHandler.exitApp(), // Fecha o app
+            },
+          ],
+          { cancelable: false }
+        );
+        return true; // Impede a navegação para a tela de login
+      }
+      return false; // Permite o comportamento padrão de voltar
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    // Cleanup
+    return () => backHandler.remove();
   }, []);
 
   const loadTransactions = async () => {
@@ -84,24 +114,21 @@ const App: React.FC = () => {
   }
 
   return (
-   
-
     <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl
-        refreshing={refreshing}
-        onRefresh={loadTransactions} // Chama a função para carregar as transações novamente
+          refreshing={refreshing}
+          onRefresh={loadTransactions} // Chama a função para carregar as transações novamente
         />
       }
-      >
+    >
       <TotBalance transactions={transactions} />
       <YearSelect />
       <TransactionForm onAddTransaction={handleAddTransaction} />
       <Balance transactions={transactions} calculateTotal={calculateTotal} />
       <TransactionList transactions={transactions} onDeleteTransaction={handleDeleteTransaction} />
     </ScrollView>
-
   );
 };
 
