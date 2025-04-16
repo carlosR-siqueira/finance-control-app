@@ -8,6 +8,11 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "android": {
+      "env": {
+        "KOTLIN_VERSION": "1.9.25"
+      }
+    },
     
     "preview": {
       "distribution": "internal"

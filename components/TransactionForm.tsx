@@ -52,7 +52,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction }) =
         theme={{
           colors: {
             primary: '#135e96', // Cor do contorno ao focar
-            text: '#000',       // Cor do texto
+            text: '#ccc',       // Cor do texto
             // background: 'transparent', // Evita que o fundo do input seja alterado
           },
         }} // Ajusta o tema
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   inputBox: {
     marginVertical: 5,
     borderRadius: 8,
-    paddingLeft: 10, // Garante o espaçamento entre o texto e a borda
+    paddingLeft: 10, 
   },
   selectContainer: {
     flexDirection: 'row',
